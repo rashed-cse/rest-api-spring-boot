@@ -6,15 +6,16 @@ import com.restapi.entity.Manager;
 
 import com.restapi.service.ManagerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/managers")
@@ -44,6 +45,69 @@ public class ManagerController {
             log.error(e.getMessage());
         }
         return new ResponseEntity<List<Manager>>(managers, HttpStatus.OK);
+    }
+
+
+    /**
+     * Get Manager by id
+     * @param managerId
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getManagerById(@PathVariable(value = "id") Integer managerId) {
+        Manager manager = managerService.findById(managerId);
+        if(manager == null) {
+            return new ResponseEntity("Manager id is not found",HttpStatus.OK);
+        }
+        return ResponseEntity.ok().body(manager);
+    }
+
+    /**
+     * Save a new Manager
+     * @param manager
+     * @return
+     */
+    @PostMapping(value="/create",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Manager createManager(@Valid @RequestBody Manager manager) {
+        return managerService.save(manager);
+    }
+
+
+    /**
+     * Update an manager by id
+     * @param managerId
+     * @param managerDetails
+     * @return
+     */
+    @PutMapping("/manager/{id}")
+    public ResponseEntity<Manager> updateManager(@PathVariable(value = "id") Integer managerId,
+                                                 @Valid @RequestBody Manager managerDetails) {
+        Manager manager = managerService.findById(managerId);
+        if(manager == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        managerDetails.setId(managerId);
+
+        Manager updatedManager = managerService.update(managerDetails);
+        return ResponseEntity.ok(updatedManager);
+    }
+
+
+    /**
+     * Delete a manager by id
+     * @param managerId
+     * @return
+     */
+    @DeleteMapping("/manager/{id}")
+    public ResponseEntity<Manager> deleteManager(@PathVariable(value = "id") Integer managerId) {
+        Manager manager = managerService.findById(managerId);
+        if(manager == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        managerService.delete(manager);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -12,7 +12,7 @@ public interface ManagerService {
 
     public Manager findById(Integer id);
     public List<Manager> findAll();
-    public Manager Save(Manager manager);
+    public Manager save(Manager manager);
     public Manager update(Manager manager);
     public void  delete(Manager manager);
 

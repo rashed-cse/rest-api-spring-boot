@@ -25,7 +25,7 @@ public class ManagerServiceImpl implements  ManagerService {
     }
 
     @Override
-    public Manager Save(Manager manager) {
+    public Manager save(Manager manager) {
         return managerRepository.save(manager);
     }
 

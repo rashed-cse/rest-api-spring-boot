@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -41,17 +42,17 @@ public class Manager implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotBlank(message = "Name can not be blank")
+    @NotEmpty(message = "Name can not be blank")
     private String name;
 
-    @NotBlank(message = "Email can not be blank")
+    @NotEmpty(message = "Email can not be blank")
     @Email(message = "Email address is not valid")
     private String email;
 
-    @NotBlank(message = "Department can not be blank")
+    @NotEmpty(message = "Department can not be blank")
     private String department;
 
-    @NotBlank(message = "Salary can not be blank")
+    @NotEmpty(message = "Salary can not be blank")
     private String salary;
 
     @OneToMany(mappedBy="manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
